@@ -6,7 +6,6 @@ var height;//height of window and canvas
 var circles = [];//contains circles
 
 init();
-circles.push(new circle(100,100));
 
 function mouseDown(e){
     var x = e.pageX;
@@ -18,6 +17,16 @@ function loop(){//call 60 times per second
     for(var i = 0; i<circles.length; i++){
         circles[i].loop();    
     }
+    
+    //check collision
+    for (var i = 0; i - 1 < circles.length - 1; i++) {
+        for (var b = i + 1; b < circles.length; b++) {
+            if(circles[i].collision(circles[b])){
+                console.log("Collision");    
+            }
+        }
+    }
+    
     draw();
 }
 
@@ -43,9 +52,18 @@ function circle(x,y){//this is an object
         this.y += this.moveY;//move the circle
         this.x += this.moveX;//move the circle
         
+        //check collision with borders
         if(this.y + this.r> height){
             this.y = height - this.r;
             this.moveY = this.moveY * -1 + 2;    
+        }
+        if(this.x + this.r> width){
+            this.x = width - this.r;
+            this.moveX = this.moveX * -1;    
+        }
+        if(this.x - this.r < 0){
+            this.x = this.r;
+            this.moveX = this.moveX * -1;    
         }
     };
     
@@ -54,6 +72,18 @@ function circle(x,y){//this is an object
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
         ctx.fill();
+    };
+    
+    this.collision = function(other){//check if circles hit each other
+        var minDist = this.r + other.r;
+        var xDist = this.x - other.x;
+        var yDist = this.y - other.y;
+        var dist = Math.sqrt(xDist * xDist + yDist * yDist);
+        if(dist <= minDist){
+            return true;    
+        }else{
+            return false;    
+        }
     };
 }
 
