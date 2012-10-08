@@ -22,7 +22,8 @@ function loop(){//call 60 times per second
     for (var i = 0; i - 1 < circles.length - 1; i++) {
         for (var b = i + 1; b < circles.length; b++) {
             if(circles[i].collision(circles[b])){
-                console.log("Collision");    
+                console.log("Collision");
+                circles[i].resolveCollision(circles[b]);
             }
         }
     }
@@ -84,6 +85,10 @@ function circle(x,y){//this is an object
         }else{
             return false;    
         }
+    };
+    
+    this.resolveCollision = function(other){
+        //TODO: put here circle collision reaction    
     };
 }
 
