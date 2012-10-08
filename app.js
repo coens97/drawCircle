@@ -46,11 +46,13 @@ function circle(x,y){//this is an object
     this.y = y;
     this.moveX = 0;
     this.moveY = 0;
-    this.r = 50;//+ Math.round(Math.random()*50);
+    this.r = 40;
     this.mass = this.r;
     
     this.loop = function(){
         this.moveY += 0.8;//gravity
+        this.moveX += (this.moveX > 0)?-0.02:(this.moveX <0)&&0.02;//wow I use some cool syntax don't understand conditional expressions? look here http://en.wikipedia.org/wiki/%3F:
+        if(this.moveX < 0.02 && this.moveX > -0.02 && this.moveX != 0){this.moveX = 0;}
         this.y += this.moveY;//move the circle
         this.x += this.moveX;//move the circle
         
@@ -97,7 +99,7 @@ function circle(x,y){//this is an object
         this.moveY = this.moveY - p * this.mass * ny;
         other.moveX = other.moveX + p * other.mass * nx;
         other.moveY = other.moveY + p * other.mass * ny;
-        //
+        //from the same page but static
         var midpointX = (this.x + other.x) / 2;
         var midpointY = (this.y + other.y) / 2;
         this.x = midpointX + this.r * (this.x - other.x) / d;
