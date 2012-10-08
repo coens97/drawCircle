@@ -46,7 +46,8 @@ function circle(x,y){//this is an object
     this.y = y;
     this.moveX = 0;
     this.moveY = 0;
-    this.r = 50;
+    this.r = 50;//+ Math.round(Math.random()*50);
+    this.mass = this.r;
     
     this.loop = function(){
         this.moveY += 0.8;//gravity
@@ -77,9 +78,7 @@ function circle(x,y){//this is an object
     
     this.collision = function(other){//check if circles hit each other
         var minDist = this.r + other.r;
-        var xDist = this.x - other.x;
-        var yDist = this.y - other.y;
-        var dist = Math.sqrt(xDist * xDist + yDist * yDist);
+        var dist = Math.sqrt(Math.pow(this.x - other.x,2) + Math.pow(this.y - other.y,2));//calculate distance
         if(dist <= minDist){
             return true;    
         }else{
@@ -87,8 +86,25 @@ function circle(x,y){//this is an object
         }
     };
     
-    this.resolveCollision = function(other){
-        //TODO: put here circle collision reaction    
+    this.resolveCollision = function(other){//when two circles colide each other
+        //from : https://sites.google.com/site/t3hprogrammer/research/circle-circle-collision-tutorial
+        //changed it so it would work in my code
+        var d = Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));//distance betweeen circles
+        var nx = (other.x - this.x) / d;
+        var ny = (other.y - this.y) / d;
+        var p = 2 * (this.moveX * nx + this.moveY * ny - other.moveX * nx - other.moveY * ny) / (this.mass + other.mass);
+        this.moveX = this.moveX - p * this.mass * nx;
+        this.moveY = this.moveY - p * this.mass * ny;
+        other.moveX = other.moveX + p * other.mass * nx;
+        other.moveY = other.moveY + p * other.mass * ny;
+        //
+        var midpointX = (this.x + other.x) / 2;
+        var midpointY = (this.y + other.y) / 2;
+        this.x = midpointX + this.r * (this.x - other.x) / d;
+        this.y = midpointY + this.r * (this.y - other.y) / d;
+        other.x = midpointX + this.r * (other.x - this.x) / d;
+        other.y = midpointY + this.r * (other.y - this.y) / d;
+        
     };
 }
 
