@@ -138,12 +138,7 @@ function init(){
     
     self.setInterval(function(){loop();},16);//create loop
     
-    if ('ontouchstart' in document.documentElement) {
-        c.addEventListener("touchstart", mouseDown, false);
-    }
-    else {
-        c.addEventListener("click", mouseDown, false);
-    }
+    c.addEventListener("click", mouseDown, false);
 }
 
 function randomColor() {
